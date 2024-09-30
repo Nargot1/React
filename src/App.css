@@ -9,7 +9,7 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
-    animation: App-logo-spin infinite 0.5s linear;
+    animation: App-logo-spin infinite 0.3s reverse;
   }
 }
 
@@ -32,9 +32,10 @@
   from {
     transform: rotate(0deg);
     transform: translate(0px,800px);
+    transform: scale(1,1);
   }
   to {
     transform: rotate(10000deg);
-    transform: translate(0px,-800px);
+    transform: scale(2,2);
   }
 }

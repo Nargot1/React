@@ -1,7 +1,15 @@
 import React from "react";
+import Odliczanie from "./Odliczanie"
 const Powitanie = () => {
-    return (
-        <h1>Witaj</h1>
+    return(
+        <div>
+            <Odliczanie/>
+            <Odliczanie/>
+            <Odliczanie/>
+            <Odliczanie/>
+            <Odliczanie/>
+            <Odliczanie/>
+        </div>
     )
 };
 
