@@ -36,6 +36,6 @@
   }
   to {
     transform: rotate(10000deg);
-    transform: scale(2,2);
+    transform: scale(1,1);
   }
 }

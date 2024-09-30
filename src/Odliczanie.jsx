@@ -1,9 +1,9 @@
 import React from "react";
 
-const Odliczanie = () => {
+const Odliczanie = props => {
     return (
         <div className="odliczanie">
-            <strong>Lekcja 1</strong> 7:45
+            <strong>{props.name}</strong> {props.czas}
         </div>
     )
 }
