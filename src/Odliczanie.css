@@ -1,0 +1,19 @@
+.iks{
+    cursor: pointer;
+    display: none;
+    float: right;
+}
+button{
+    background-color: #282c34;
+}
+
+.odliczanie:hover .iks{
+    display: block;
+}
+.odliczanie{
+    margin-bottom: 20px;
+}
+.iks button{
+    border: none;
+    text-decoration: none;
+}
