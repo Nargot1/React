@@ -21,6 +21,9 @@ class Powitanie extends Component {
         }
         this.dodanieLekcji = this.dodanieLekcji.bind(this);
         this.zapisanieLekcji = this.zapisanieLekcji.bind(this);
+        this.correctName = false;
+        this.correctHour = false;
+        this.correctMinute = false;
     }
 
     usunLeckje(id){
@@ -54,6 +57,7 @@ class Powitanie extends Component {
         const Lekcje = this.state.Lekcje.map(element => {
             return <Odliczanie id={element.id} name={element.name} czasG={element.czasG} czasM={element.czasM} OnDelete = {() => this.usunLeckje(element.id)}/>
         })
+        
         return(
             <div className="EdycjaLekcji">
                 {Lekcje}
@@ -61,12 +65,20 @@ class Powitanie extends Component {
                     name = {this.state.edytowaneLekcje.name}
                     czasG = {this.state.edytowaneLekcje.czasG}
                     czasM = {this.state.edytowaneLekcje.czasM}
+                    correctName = {val =>{this.correctName = val}}
+                    correctHour = {val =>{this.correctHour = val}}
+                    correctMinute = {val =>{this.correctMinute = val}}
                     onInputChange = 
                     {
                         val => this.dodanieLekcji(val)
                     }
                     onSave = {
-                        () => this.zapisanieLekcji()
+                        () => {
+                            if(this.correctName && this.correctHour && this.correctMinute)
+                                this.zapisanieLekcji()
+                            else
+                                alert("Niepoprawne dane")
+                        }
                     }
                 ></EdycjaLekcji>
             </div>
