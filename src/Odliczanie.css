@@ -3,15 +3,23 @@
     display: none;
     float: right;
 }
+.edycja{
+    margin: 10px;
+    cursor: pointer;
+}
+.operacje{
+    float: right;
+    display: none;
+    font-size: 1.7em;
+}
+.odliczanie:hover .operacje{
+    display: block;
+}
 button{
     background-color: #282c34;
 }
-
-.odliczanie:hover .iks{
-    display: block;
-}
 .odliczanie{
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 .iks button{
     border: none;

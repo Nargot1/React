@@ -21,20 +21,21 @@ const Odliczanie = props => {
     return (
         <div className="odliczanie">
             {props.id} - <strong>{props.name}</strong> ___ {props.czasG} : {props.czasM}
-            <div className="iks">
-                <button onClickCapture={() => {changeGif();}}>
-                    <img src={animating ? kosz : koszstatic} alt="kosz" ></img>
-                    </button>
+            <div className="operacje">
+                <b id='iks' onClick={() => {changeGif();}}><img src={animating ? kosz : koszstatic} alt="kosz" ></img></b>
+                <i id='edycja' onClick={() => props.edytujLekcje(props.id)}>[E]</i>
             </div>
         </div>
     )
 }
 
 Odliczanie.propTypes = {
-    id: PropTypes.string,
+    id: PropTypes.number,
     name: PropTypes.string,
-    czasM: PropTypes.string,
-    czasG: PropTypes.string
+    czasM: PropTypes.number,
+    czasG: PropTypes.number,
+    edytujLekcje: PropTypes.func,
+    OnDelete: PropTypes.func
 }
 
 export default Odliczanie;

@@ -1,29 +1,39 @@
 import React, { Component } from "react";
 import EdycjaLekcji from "./Edycja";
 import Odliczanie from "./Odliczanie"
+import uniqid from "uniqid";
+
 class Powitanie extends Component {
     constructor(){
         super();
         this.state = {
             Lekcje: [
-                {id:0,name:"Lekcja 1",czasG:"7",czasM:"40"},
-                {id:1,name:"Lekcja 2",czasG:"8",czasM:"30"},
-                {id:2,name:"Lekcja 3",czasG:"9",czasM:"20"},
-                {id:3,name:"Lekcja 4",czasG:"10",czasM:"10"},
-                {id:4,name:"Lekcja 5",czasG:"11",czasM:"10"},
-                {id:5,name:"Lekcja 6",czasG:"12",czasM:"10"},
+                {id:uniqid(),name:"Lekcja 1",czasG:7,czasM:40},
+                {id:uniqid(),name:"Lekcja 2",czasG:8,czasM:30},
+                {id:uniqid(),name:"Lekcja 3",czasG:9,czasM:20},
+                {id:uniqid(),name:"Lekcja 4",czasG:10,czasM:10},
+                {id:uniqid(),name:"Lekcja 5",czasG:11,czasM:10},
+                {id:uniqid(),name:"Lekcja 6",czasG:12,czasM:10},
             ],
             edytowaneLekcje: {
-                id: 6,
-                name: "",
-                czasG: ""
+                id: uniqid(),
+                name: -1,
+                czasG: -1
             }
         }
         this.dodanieLekcji = this.dodanieLekcji.bind(this);
         this.zapisanieLekcji = this.zapisanieLekcji.bind(this);
+        this.usunLeckje = this.usunLeckje.bind(this)
+        this.EdycjaLekcji = this.EdycjaLekcji.bind(this)
         this.correctName = false;
         this.correctHour = false;
         this.correctMinute = false;
+    }
+
+    EdycjaLekcji(id){
+        this.setState(prevState => ({
+            edytowaneLekcje: {...prevState.Lekcje.find(element => element.id === id)}
+        }))
     }
 
     usunLeckje(id){
@@ -43,19 +53,39 @@ class Powitanie extends Component {
     }
 
     zapisanieLekcji(){
-        this.setState(prevState=> ({
-            Lekcje: [...prevState.Lekcje, prevState.edytowaneLekcje],
-            edytowaneLekcje: {
-                id: 6,
-                name: "",
-                czasG: ""
+        this.setState(prevState => {
+            const czyLekcjaJuzIstnieje = prevState.Lekcje.find(
+                element => element.id === prevState.edytowaneLekcje.id
+            );
+            let aktualizowanieLekcji;
+            if(czyLekcjaJuzIstnieje){
+                aktualizowanieLekcji = prevState.Lekcje.map(element=>
+                {
+                    if ( element.id == prevState.edytowaneLekcje.id)
+                        return prevState.edytowaneLekcje;
+                    else
+                        return element;
+                })
             }
-        }))
+            else
+            {
+                aktualizowanieLekcji = [...prevState.Lekcje,prevState.edytowaneLekcje]
+            }
+            return{
+                Lekcje: aktualizowanieLekcji,
+                edytowaneLekcje:{
+                    id: uniqid(),
+                    name: "",
+                    czasG: -1,
+                    czasM: -1
+                }
+            }
+    })
     }
 
     render(){
         const Lekcje = this.state.Lekcje.map(element => {
-            return <Odliczanie id={element.id} name={element.name} czasG={element.czasG} czasM={element.czasM} OnDelete = {() => this.usunLeckje(element.id)}/>
+            return <Odliczanie key={element.id} id={element.id} name={element.name} czasG={element.czasG} czasM={element.czasM} OnDelete = {() => this.usunLeckje(element.id)} edytujLekcje = {id => this.EdycjaLekcji(id)}/>
         })
         
         return(
