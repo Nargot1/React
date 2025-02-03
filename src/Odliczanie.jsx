@@ -7,6 +7,8 @@ import koszstatic from "./kosz.png"
 
 const Odliczanie = props => {
 
+    let color = "0";
+
     const sekundyLekcja = godzinaMinutaDoSekund(props.czasG, props.czasM);
     const sekundyTeraz = godzinaMinutaDoSekund(props.obecnyCzas.godzina, props.obecnyCzas.minuta) + props.obecnyCzas.sekunda;
 
@@ -14,10 +16,12 @@ const Odliczanie = props => {
     const pozostaloSekundTekst = pozostaloSekund > 0 ? sekundyDoGodzinMinutSekund(pozostaloSekund) : pozostaloSekund > 45*60 ? "ta lekcja odbędzie się dopiero jutro"  : "Lekcja Trwa";
 
     const [animating, setAnimating] = useState(false)
-
-    setInterval(() => {
-        
-    }, 1000);
+    if(pozostaloSekund < 0 && pozostaloSekund > 45*60)
+    {
+        setInterval(() => {
+            color = "hsl(" + (115 * (pozostaloSekund/2700)) + ", 100%, 50%)";
+        }, 1000);
+    }
 
     const changeGif = () => {
         if(!animating)
@@ -32,7 +36,7 @@ const Odliczanie = props => {
 
     return (
         <div className="odliczanie">
-            <div class="nazwa">{props.id} - <strong>{props.name}</strong> ___ {props.czasG} : {props.czasM}</div>
+            <div color={color} class="nazwa">{props.id} - <strong>{props.name}</strong> ___ {props.czasG} : {props.czasM}</div>
             <div className="operacje">
                 <b id='iks' onClick={() => {changeGif();}}><img src={animating ? kosz : koszstatic} alt="kosz" ></img></b>
                 <i id='edycja' onClick={() => props.edytujLekcje(props.id)}>[E]</i>

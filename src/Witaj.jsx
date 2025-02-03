@@ -98,7 +98,7 @@ class Powitanie extends Component {
                 minuta: new Date().getMinutes(),
                 sekunda: new Date().getSeconds()
             }
-        });
+        }, () => localStorage.setItem("Lekcje", JSON.stringify(this.state.Lekcje)));
     }
 
     componentDidMount(){
