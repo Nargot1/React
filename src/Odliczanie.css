@@ -12,8 +12,11 @@
     display: none;
     font-size: 1.7em;
 }
+.nazwa{
+    position: relative;
+}
 .odliczanie:hover .operacje{
-    display: block;
+    display: inline;
 }
 button{
     background-color: #282c34;
@@ -24,4 +27,11 @@ button{
 .iks button{
     border: none;
     text-decoration: none;
+}
+.odliczanie p{
+    display: block;
+}
+.odliczanie{
+    padding: 5px 30px;
+    border: 5px solid #0c3c9d;
 }
