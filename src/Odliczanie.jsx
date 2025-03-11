@@ -7,21 +7,31 @@ import koszstatic from "./kosz.png"
 
 const Odliczanie = props => {
 
-    let color = "0";
+    const [color,setColor] = useState("hsl(270, 100%, 50%)");
 
     const sekundyLekcja = godzinaMinutaDoSekund(props.czasG, props.czasM);
     const sekundyTeraz = godzinaMinutaDoSekund(props.obecnyCzas.godzina, props.obecnyCzas.minuta) + props.obecnyCzas.sekunda;
 
-    const pozostaloSekund = sekundyLekcja - sekundyTeraz;
-    const pozostaloSekundTekst = pozostaloSekund > 0 ? sekundyDoGodzinMinutSekund(pozostaloSekund) : pozostaloSekund > 45*60 ? "ta lekcja odbędzie się dopiero jutro"  : "Lekcja Trwa";
 
-    const [animating, setAnimating] = useState(false)
-    if(pozostaloSekund < 0 && pozostaloSekund > 45*60)
-    {
-        setInterval(() => {
-            color = "hsl(" + (115 * (pozostaloSekund/2700)) + ", 100%, 50%)";
-        }, 1000);
-    }
+    const pozostaloSekund = sekundyLekcja - sekundyTeraz;
+    const pozostaloSekundTekst = props.week > props.currentWeek ? "Lekcja odbedzie sie za tydzien"
+    :
+    props.week < props.currentWeek ? "Lekcja się zakończyła"
+    :
+    props.day > props.currentDay ? "Lekcja odbedzie sie za " + (86400 - pozostaloSekund > 86400 ? (props.day - props.currentDay-1 > 0 ? (props.day - props.currentDay-1) + "dni " : "") + sekundyDoGodzinMinutSekund(86400 + pozostaloSekund) : (props.day - props.currentDay) + " dni i " + sekundyDoGodzinMinutSekund(pozostaloSekund))
+    :
+    props.day < props.currentDay ? "Lekcja się zakończyła"
+    : 
+    pozostaloSekund > 0 ? ("Lekcja odbedzie sie za: " + sekundyDoGodzinMinutSekund(pozostaloSekund))
+    : 
+    pozostaloSekund < -45*60 ? "Lekcja się zakończyła"  
+    :
+    "Lekcja Trwa";
+
+    const [animating, setAnimating] = useState(false);
+    setInterval(() => {
+        setColor("hsl(" + Math.max(Math.min(((115 * ((pozostaloSekund+(props.day-props.currentDay)*86400)/2700+1))),270),0)+ ", 100%, " + (pozostaloSekund/2700 < -1 ?  (props.day-props.currentDay > 0 ? "50%" : "0%") : "50%") + ")");
+    }, 1000);
 
     const changeGif = () => {
         if(!animating)
@@ -33,15 +43,14 @@ const Odliczanie = props => {
             },1000)
         }
     }
-
     return (
         <div className="odliczanie">
-            <div color={color} class="nazwa">{props.id} - <strong>{props.name}</strong> ___ {props.czasG} : {props.czasM}</div>
+            <div style={{color: color}} class="nazwa" id="nazwa">{props.id} - <strong>{props.name}</strong> ___ {props.czasG} : {props.czasM}</div>
             <div className="operacje">
                 <b id='iks' onClick={() => {changeGif();}}><img src={animating ? kosz : koszstatic} alt="kosz" ></img></b>
                 <i id='edycja' onClick={() => props.edytujLekcje(props.id)}>[E]</i>
             </div>
-            <p><i> do tej lekcji pozostało jeszcze: </i> {pozostaloSekundTekst}</p>
+            <p>{pozostaloSekundTekst}</p>
             
         </div>
     )
@@ -52,6 +61,10 @@ Odliczanie.propTypes = {
     name: PropTypes.string,
     czasM: PropTypes.number,
     czasG: PropTypes.number,
+    week: PropTypes.number,
+    day: PropTypes.number,
+    currentWeek: PropTypes.number,
+    currentDay: PropTypes.number,
     edytujLekcje: PropTypes.func,
     OnDelete: PropTypes.func,
     obecnyCzas: PropTypes.shape(

@@ -21,9 +21,6 @@
 button{
     background-color: #282c34;
 }
-.odliczanie{
-    margin-bottom: 30px;
-}
 .iks button{
     border: none;
     text-decoration: none;
@@ -34,4 +31,11 @@ button{
 .odliczanie{
     padding: 5px 30px;
     border: 5px solid #0c3c9d;
+    width: 75%;
+    margin: 0 auto;
+    margin-bottom: 30px;
+}
+select{
+    margin: 50px;
+    padding: 10px;
 }
