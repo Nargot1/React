@@ -53,25 +53,7 @@ class Powitanie extends Component {
                     {id:uniqid(),name:"Lekcja 4",czasG:10,czasM:10},
                     {id:uniqid(),name:"Lekcja 5",czasG:11,czasM:10},
                     {id:uniqid(),name:"Lekcja 6",czasG:12,czasM:10}
-                ],
-                [
-                    {id:uniqid(),name:"Lekcja 1",czasG:7,czasM:40},
-                    {id:uniqid(),name:"Lekcja 2",czasG:8,czasM:30},
-                    {id:uniqid(),name:"Lekcja 3",czasG:9,czasM:20},
-                    {id:uniqid(),name:"Lekcja 4",czasG:10,czasM:10},
-                    {id:uniqid(),name:"Lekcja 5",czasG:11,czasM:10},
-                    {id:uniqid(),name:"Lekcja 6",czasG:12,czasM:10}
-                ],
-                [
-                    {id:uniqid(),name:"Lekcja 1",czasG:7,czasM:40},
-                    {id:uniqid(),name:"Lekcja 2",czasG:8,czasM:30},
-                    {id:uniqid(),name:"Lekcja 3",czasG:9,czasM:20},
-                    {id:uniqid(),name:"Lekcja 4",czasG:10,czasM:10},
-                    {id:uniqid(),name:"Lekcja 5",czasG:11,czasM:10},
-                    {id:uniqid(),name:"Lekcja 6",czasG:12,czasM:10}
-                ],
-                [],
-                []
+                ]
             ],
                 [
                     [
@@ -113,25 +95,7 @@ class Powitanie extends Component {
                         {id:uniqid(),name:"Lekcja 4",czasG:10,czasM:10},
                         {id:uniqid(),name:"Lekcja 5",czasG:11,czasM:10},
                         {id:uniqid(),name:"Lekcja 6",czasG:12,czasM:10}
-                    ],
-                    [
-                        {id:uniqid(),name:"Lekcja 1",czasG:7,czasM:40},
-                        {id:uniqid(),name:"Lekcja 2",czasG:8,czasM:30},
-                        {id:uniqid(),name:"Lekcja 3",czasG:9,czasM:20},
-                        {id:uniqid(),name:"Lekcja 4",czasG:10,czasM:10},
-                        {id:uniqid(),name:"Lekcja 5",czasG:11,czasM:10},
-                        {id:uniqid(),name:"Lekcja 6",czasG:12,czasM:10}
-                    ],
-                    [
-                        {id:uniqid(),name:"Lekcja 1",czasG:7,czasM:40},
-                        {id:uniqid(),name:"Lekcja 2",czasG:8,czasM:30},
-                        {id:uniqid(),name:"Lekcja 3",czasG:9,czasM:20},
-                        {id:uniqid(),name:"Lekcja 4",czasG:10,czasM:10},
-                        {id:uniqid(),name:"Lekcja 5",czasG:11,czasM:10},
-                        {id:uniqid(),name:"Lekcja 6",czasG:12,czasM:10}
-                    ],
-                    [],
-                    []
+                    ]
                 ],
             ],
             edytowaneLekcje: {
@@ -158,14 +122,14 @@ class Powitanie extends Component {
 
     EdycjaLekcji(id){
         this.setState(prevState => ({
-            edytowaneLekcje: {...prevState.Lekcje.at(this.state.week).at(this.state.day).find(element => element.id === id)}
+            edytowaneLekcje: {...prevState.Lekcje[this.state.week][this.state.day].find(element => element.id === id)}
         }))
     }
 
     usunLeckje(id){
         this.setState(prevState=> {
             return{
-                Lekcje: [...prevState.Lekcje.at(this.state.week).at(this.state.day).filter(x => x.id !== id)]
+                Lekcje: [...prevState.Lekcje[this.state.week][this.state.day].filter(x => x.id !== id)]
             }
         }, () => localStorage.setItem("Lekcje", JSON.stringify(this.state.Lekcje)))
     }
@@ -181,13 +145,18 @@ class Powitanie extends Component {
     zapisanieLekcji(){
         this.setState(prevState => 
         {
-            const czyLekcjaJuzIstnieje = prevState.Lekcje.at(this.state.week).at(this.state.day).find(
+            const czyLekcjaJuzIstnieje = prevState.Lekcje[this.state.week][this.state.day].find(
                 element => element.id === prevState.edytowaneLekcje.id
             );
+            const czyLekcjaKoliduje = prevState.Lekcje[this.state.week][this.state.day].find(
+                element => !((element.czasG*60+element.czasM) < (prevState.edytowaneLekcje.czasG*60+prevState.edytowaneLekcje.czasM) && (element.czasG*60+element.czasM+45) > (prevState.edytowaneLekcje.czasG*60+prevState.edytowaneLekcje.czasM)) || ((element.czasG*60+element.czasM) < (prevState.edytowaneLekcje.czasG*60+prevState.edytowaneLekcje.czasM+50) && (element.czasG*60+element.czasM+50) > (prevState.edytowaneLekcje.czasG*60+prevState.edytowaneLekcje.czasM+50))
+            );
+            console.log(czyLekcjaKoliduje);
             let aktualizowanieLekcji;
+            let aktualizowanieLekcji2;
             if(czyLekcjaJuzIstnieje)
             {
-                aktualizowanieLekcji = prevState.Lekcje.at(this.state.week).at(this.state.day).map(element=>
+                aktualizowanieLekcji = prevState.Lekcje[this.state.week][this.state.day].map(element=>
                 {
                     if ( element.id === prevState.edytowaneLekcje.id)
                         return prevState.edytowaneLekcje;
@@ -195,9 +164,15 @@ class Powitanie extends Component {
                         return element;
                 })
             }
+            else if(!czyLekcjaKoliduje)
+            {
+                aktualizowanieLekcji = prevState.Lekcje;
+                aktualizowanieLekcji[this.state.week][this.state.day] = [...prevState.Lekcje[this.state.week][this.state.day],prevState.edytowaneLekcje]
+            }
             else
             {
-                aktualizowanieLekcji = [...prevState.Lekcje.at(this.state.week).at(this.state.day),prevState.edytowaneLekcje]
+                alert("Koliduje z inna lekcja")
+                aktualizowanieLekcji = prevState.Lekcje;
             }
             return{
                 Lekcje: aktualizowanieLekcji,
@@ -235,14 +210,14 @@ class Powitanie extends Component {
     }
 
     render(){
-        const Lekcje = this.state.Lekcje.at(this.state.week).at(this.state.day).map(element => {
+        const Lekcje = this.state.Lekcje[this.state.week][this.state.day].map(element => {
             return <Odliczanie key={element.id} id={element.id} name={element.name} czasG={element.czasG} czasM={element.czasM} obecnyCzas = {this.state.czas} day = {this.state.day} currentDay={this.state.currentDay} currentWeek={this.state.currentWeek} week = {this.state.week} OnDelete = {() => this.usunLeckje(element.id)} edytujLekcje = {id => this.EdycjaLekcji(id)}/>
         })
         const nWeek = [];
         const nDay = [[],[]];
         for (let index = 0; index < this.state.Lekcje.length; index++) {
             nWeek[nWeek.length] = <option value={index}>Tydzien {nWeek.length+1}</option>
-            for (let days = 0; days < this.state.Lekcje.at(this.state.week).length-1; days++) {
+            for (let days = 0; days < this.state.Lekcje[this.state.week].length; days++) {
                 nDay[index][days] = <option value={days}>Dzien {days+1}</option>
             }
         }
@@ -254,7 +229,7 @@ class Powitanie extends Component {
                     {nWeek}
                 </select>
                 <select name="day" id="day" onChange={(e) => this.changeDay(e)} >
-                    {nDay.at(this.state.week)}
+                    {nDay[this.state.week]}
                 </select>
                 {Lekcje}
                 <EdycjaLekcji
