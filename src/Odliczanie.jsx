@@ -14,11 +14,11 @@ const Odliczanie = props => {
 
 
     const pozostaloSekund = sekundyLekcja - sekundyTeraz;
-    const pozostaloSekundTekst = props.week > props.currentWeek ? "Lekcja odbedzie sie za tydzien"
+    const pozostaloSekundTekst = props.week < props.currentWeek ? "Lekcja się zakończyła"
     :
-    props.week < props.currentWeek ? "Lekcja się zakończyła"
+    ((props.week - props.currentWeek)*7 + (props.day+1) - (props.currentDay+1) > 0) ? (pozostaloSekund < 0 ? ( (props.week - props.currentWeek)*7 + (props.day+1) - (props.currentDay+2) == 0 ? "Lekcja odbedzie sie za " + sekundyDoGodzinMinutSekund(86400 + pozostaloSekund) : "Lekcja odbedzie sie za " + ((props.week - props.currentWeek)*7 + (props.day+1) - (props.currentDay+2)) + " dni i " + sekundyDoGodzinMinutSekund(86400 + pozostaloSekund) )
     :
-    props.day > props.currentDay ? "Lekcja odbedzie sie za " + (86400 - pozostaloSekund > 86400 ? (props.day - props.currentDay-1 > 0 ? (props.day - props.currentDay-1) + "dni " : "") + sekundyDoGodzinMinutSekund(86400 + pozostaloSekund) : (props.day - props.currentDay) + " dni i " + sekundyDoGodzinMinutSekund(pozostaloSekund))
+    "Lekcja odbedzie sie za " + ((props.week - props.currentWeek)*7 + (props.day+1) - (props.currentDay+1)) + " dni i " + sekundyDoGodzinMinutSekund(pozostaloSekund))
     :
     props.day < props.currentDay ? "Lekcja się zakończyła"
     : 

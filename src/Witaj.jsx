@@ -106,7 +106,7 @@ class Powitanie extends Component {
             week: 0,
             day: 0,
             currentWeek: 0,
-            currentDay: new Date().getDay()-1,
+            currentDay: new Date().getDay() > 0 ? new Date().getDay() - 1 : 6,
         }
         this.dodanieLekcji = this.dodanieLekcji.bind(this);
         this.zapisanieLekcji = this.zapisanieLekcji.bind(this);
@@ -118,6 +118,8 @@ class Powitanie extends Component {
         this.correctName = false;
         this.correctHour = false;
         this.correctMinute = false;
+        if(this.state.currentDay === -1) console.warn("Tego tygodnia nie ma w planie");
+        ;
     }
 
     EdycjaLekcji(id){
@@ -149,7 +151,7 @@ class Powitanie extends Component {
                 element => element.id === prevState.edytowaneLekcje.id
             );
             const czyLekcjaKoliduje = prevState.Lekcje[this.state.week][this.state.day].find(
-                element => !((element.czasG*60+element.czasM) < (prevState.edytowaneLekcje.czasG*60+prevState.edytowaneLekcje.czasM) && (element.czasG*60+element.czasM+45) > (prevState.edytowaneLekcje.czasG*60+prevState.edytowaneLekcje.czasM)) || ((element.czasG*60+element.czasM) < (prevState.edytowaneLekcje.czasG*60+prevState.edytowaneLekcje.czasM+50) && (element.czasG*60+element.czasM+50) > (prevState.edytowaneLekcje.czasG*60+prevState.edytowaneLekcje.czasM+50))
+                element => !(((element.czasG*60+element.czasM) < (prevState.edytowaneLekcje.czasG*60+prevState.edytowaneLekcje.czasM+45))) || (((element.czasG*60+element.czasM+45) > (prevState.edytowaneLekcje.czasG*60+prevState.edytowaneLekcje.czasM)))
             );
             console.log(czyLekcjaKoliduje);
             let aktualizowanieLekcji;

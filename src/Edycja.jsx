@@ -21,7 +21,7 @@ var EdycjaLekcji = props => {
             <div className="EdycjaLekcji_input-grupa">
                 <label htmlFor="czasG">Podaj godzinę</label>
                 <input type="tel" id="czasG" name="czasG" onChange={(e) => {
-                    props.onInputChange({[e.target.name]: e.target.value})
+                    props.onInputChange({[e.target.name]: parseInt(e.target.value)})
                     let regex =/^\d+$/;
                     if(!regex.test(e.target.value)){
                         e.target.style.color = "red";
@@ -36,7 +36,7 @@ var EdycjaLekcji = props => {
             <div className="EdycjaLekcji_input-grupa">
                 <label htmlFor="czasM">Podaj minutę</label>
                 <input type="tel" id="czasM" name="czasM" onChange={(e) => {
-                    props.onInputChange({[e.target.name]: e.target.value})
+                    props.onInputChange({[e.target.name]: parseInt(e.target.value)})
                     let regex =/^\d+$/;
                     if(!regex.test(e.target.value)){
                         e.target.style.color = "red";
@@ -49,6 +49,9 @@ var EdycjaLekcji = props => {
                     }} />
             </div>
             <button onClick={()=>{
+                    document.getElementById("name").value = "";
+                    document.getElementById("czasG").value = "";
+                    document.getElementById("czasM").value = "";
                     props.onSave();
                 }
                 }> OK </button>
